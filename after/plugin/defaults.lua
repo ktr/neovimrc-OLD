@@ -41,7 +41,7 @@ vim.keymap.set('n', '<F10>', '"*y')
 vim.keymap.set('n', '<F11>', '"*yG')
 
 -- copy entire file to clipboard (regardless of where you are in file)
-vim.keymap.set('n', '<F12>', '":%y *')
+vim.keymap.set('n', '<F12>', ':%y *<CR>')
 
 -- show/hide spaces, tabs, etc.
 vim.keymap.set('n', '<leader>s', ':set nolist!', { silent = true })
@@ -61,3 +61,10 @@ vim.keymap.set('n', '<leader>d', ':let @*=expand("%:p:h")<CR>:echo "Copied direc
 
 -- copy filename (including) path and line number to clipboard
 vim.keymap.set('n', '<leader>l', ':let @*="load -r " . line(".") . " " . expand("%:p")<CR>:echo "Copied filename (incl. path) AND linenumber to clipboard"<CR>')
+
+-- don't wrap lines
+vim.o.wrap = false
+-- make sure gg goes to beginning of line
+vim.o.sol = true
+-- no mouse
+vim.o.mouse = ''
