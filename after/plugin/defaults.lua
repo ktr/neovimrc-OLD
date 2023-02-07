@@ -60,7 +60,7 @@ vim.keymap.set('n', '<leader>f', ':let @*=expand("%:p")<CR>:echo "Copied filenam
 vim.keymap.set('n', '<leader>d', ':let @*=expand("%:p:h")<CR>:echo "Copied directory to clipboard"<CR>')
 
 -- copy filename (including) path and line number to clipboard
-vim.keymap.set('n', '<leader>l', ':let @*="load -r " . line(".") . " " . expand("%:p")<CR>:echo "Copied filename (incl. path) AND linenumber to clipboard"<CR>')
+-- vim.keymap.set('n', '<leader>l', ':let @*="load -r " . line(".") . " " . expand("%:p")<CR>:echo "Copied filename (incl. path) AND linenumber to clipboard"<CR>')
 
 -- don't wrap lines
 vim.o.wrap = false
@@ -68,3 +68,58 @@ vim.o.wrap = false
 vim.o.sol = true
 -- no mouse
 vim.o.mouse = ''
+
+vim.o.softtabstop = true
+vim.o.shiftwidth = 2
+vim.o.textwidth = 100
+vim.o.expandtab = true
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "vim,html,jinja,svelte",
+  command = [[let b:delimitMate_matchpairs = "(:),[:],{:}"]],
+})
+
+vim.g.closetag_filetypes = 'html,xhtml,phtml,svelte,jinja'
+vim.keymap.set('n', '<leader>lf', ':lua vim.lsp.buf.format({timeout_ms = 2500})<CR>')
+
+--[[
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.formatting.sqlfluff.with({
+      extra_args = { "--dialect", "postgres" }, -- change to your dialect
+    }),
+  }
+})
+
+-- vim.cmd('map <Leader>lf :lua vim.lsp.buf.formatting_sync(nil, 10000)<CR>')
+
+local lsp_formatting = function(bufnr)
+  vim.lsp.buf.format({
+    filter = function(client)
+      return client.name == "null-ls"
+    end,
+    bufnr = bufnr,
+  })
+end
+
+-- if you want to set up formatting on save, you can use this as a callback
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+-- add to your shared on_attach callback
+local on_attach = function(client, bufnr)
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        lsp_formatting(bufnr)
+      end,
+    })
+  end
+end
+--]]
