@@ -126,4 +126,4 @@ end
 
 vim.api.nvim_set_keymap("n", "<F8>", "<cmd>lua require('flattensql').flatten_sql()<CR>", { noremap = true })
 -- reformat highlighted section with sql-formatter
-vim.api.nvim_set_keymap("x", "<leader>q", ":!sql-formatter<CR>", {})
+vim.api.nvim_set_keymap("x", "<leader>q", ":!sql-formatter --config ~/.config/zshrc/sql-formatter.json<CR>", {})
