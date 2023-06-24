@@ -68,3 +68,8 @@ vim.o.wrap = false
 vim.o.sol = true
 -- no mouse
 vim.o.mouse = ''
+
+-- always use spaces and make tabs 4 spaces wide
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+vim.o.expandtab = true
