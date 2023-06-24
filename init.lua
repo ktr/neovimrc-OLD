@@ -52,7 +52,16 @@ require('packer').startup(function(use)
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
+
+  --[[
+  use({
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require("null-ls").setup()
+    end,
+    requires = { "nvim-lua/plenary.nvim" },
+  }) --elias-alvarez/null-ls.nvim' -- linting
+  --]]
 
   -- Fuzzy Finder (files, lsp, etc)
   use {
@@ -68,14 +77,22 @@ require('packer').startup(function(use)
     run = 'make',
     cond = vim.fn.executable 'make' == 1,
   }
-  -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   --]]
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  --[[
   use {
     'nvim-telescope/telescope-fzf-native.nvim',
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
   }
+  --]]
 
-  use 'Raimondi/delimitMate' -- auto-complete parens, etc.
+  use 'Raimondi/delimitMate'         -- auto-complete parens, etc.
+  use 'evanleck/vim-svelte'          -- svelte syntax highlighting
+  use 'mattn/emmet-vim'              -- html shortcuts
+  use 'tpope/vim-repeat'
+  use 'alvan/vim-closetag'           -- working with html tags is nicer
+  use 'pangloss/vim-javascript'      -- javascript highlighting
+  use 'HerringtonDarkholme/yats.vim' -- typescript highlighting
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')

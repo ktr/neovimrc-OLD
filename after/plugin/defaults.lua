@@ -60,7 +60,7 @@ vim.keymap.set('n', '<leader>f', ':let @*=expand("%:p")<CR>:echo "Copied filenam
 vim.keymap.set('n', '<leader>d', ':let @*=expand("%:p:h")<CR>:echo "Copied directory to clipboard"<CR>')
 
 -- copy filename (including) path and line number to clipboard
-vim.keymap.set('n', '<leader>l', ':let @*="load -r " . line(".") . " " . expand("%:p")<CR>:echo "Copied filename (incl. path) AND linenumber to clipboard"<CR>')
+-- vim.keymap.set('n', '<leader>l', ':let @*="load -r " . line(".") . " " . expand("%:p")<CR>:echo "Copied filename (incl. path) AND linenumber to clipboard"<CR>')
 
 -- don't wrap lines
 vim.o.wrap = false
@@ -73,3 +73,16 @@ vim.o.mouse = ''
 vim.o.softtabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = true
+vim.o.textwidth = 100
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "vim,html,jinja,svelte",
+  command = [[let b:delimitMate_matchpairs = "(:),[:],{:}"]],
+})
+
+vim.g.closetag_filetypes = 'html,xhtml,phtml,svelte,jinja'
+vim.keymap.set('n', '<leader>lf', ':lua vim.lsp.buf.format({timeout_ms = 2500})<CR>')
+
+vim.api.nvim_set_keymap("n", "<F8>", "<cmd>lua require('flattensql').flatten_sql()<CR>", { noremap = true })
+-- reformat highlighted section with sql-formatter
+vim.api.nvim_set_keymap("x", "<leader>q", ":!sql-formatter --config ~/.config/zshrc/sql-formatter.json<CR>", {})
